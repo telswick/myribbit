@@ -237,7 +237,7 @@ footer div.wrapper img {
 				<div class="ribbitWrapper">
 					<img class="avatar" src="http://i.imgur.com/JaypYsb.png">
 					<span class="name"><?php
-                        $username = $db->query("SELECT username FROM user WHERE id = $row[id]");
+                        $username = $db->query("SELECT username FROM user WHERE id = $row[user_id]");
                         // $username = implode($username);
                         if ($userrow = $username->fetch_assoc()) {
                             echo $userrow['username'];
