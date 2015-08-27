@@ -41,7 +41,7 @@ if ($db->connect_errno) {
   color: #3f3e3d;
 }
 body {
-  background: white url(gfx/bg.png);
+  background: white url(bg.png);
   margin: 0;
   padding: 0;
 }
@@ -88,7 +88,7 @@ a:hover {
   margin: auto;
 }
 header {
-  background: url(gfx/bg-header.png);
+  background: url(bg-header.png);
   height: 85px;
   width: 100%;
 }
@@ -199,7 +199,7 @@ header div.wrapper #btnLogOut {
   margin: 18px 0;
 }
 footer {
-  background: url(gfx/bg-footer.png);
+  background: url(bg-footer.png);
   height: 251px;
   font-size: 14px;
   clear: both;
@@ -235,7 +235,13 @@ footer div.wrapper img {
 
                 ?>
 				<div class="ribbitWrapper">
-					<img class="avatar" src="http://i.imgur.com/JaypYsb.png">
+					<img class="avatar" <?php
+                        $userpic = $db->query("SELECT profile_pic_url FROM profile WHERE id = $row[user_id]");
+                        if ($userpicrow = $userpic->fetch_assoc()) {
+                            $profilepic = $userpicrow['profile_pic_url'];
+                            ?>
+                            src = "<?php echo $profilepic   ?>" ><?php
+                         }  ?>
 					<span class="name"><?php
                         $username = $db->query("SELECT username FROM user WHERE id = $row[user_id]");
                         // $username = implode($username);
