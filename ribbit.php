@@ -26,6 +26,38 @@ if ($db->connect_errno) {
     exit();
 }
 
+?>
+
+<form  action="ribbit.php"
+       method="POST">
+    <h4>Sort Ribbits by Most Recent Post First</h4>
+    <input type="submit" name="sortribbits" value="Sort Ribbits">
+
+
+
+<h4>Show All Users</h4>
+<p>
+    <input type="submit" name="showusers" value="Show Users">
+</p>
+
+
+<h4>Show Ribbits by User</h4>
+<p>
+    <input type="text" name="username"  value="Enter Username:"></textarea>
+    <input type="submit" name="showribbits" value="Show Ribbits">
+</p>
+
+<h4>Search Ribbits by Text</h4>
+<p>
+    <input type="text" name="searchtext"  value="Enter Search Text:"></textarea>
+    <input type="submit" name="searchribbits"  value="Search Ribbits">
+</p>
+</form>
+
+
+
+<?php
+
 
 
 /* Here is the ribbit template given   */
@@ -221,12 +253,23 @@ footer div.wrapper img {
 		</div>
 	</header>
 	<div id="content">
-		<div class="wrapper">
+
+
+
+        <?php
+        // the following if section isn't working
+        if (isset($_POST['sortribbits']))   {
+        ?>
+
+        <div class="wrapper">
 			<div id="ribbits" class="panel left">
 				<h1>Public Ribbits</h1>
 
+
+
                 <?php
-                $sql = "SELECT * FROM ribbit";
+
+                $sql = "SELECT * FROM ribbit ORDER BY created DESC";
                 $result = $db->query($sql);
 
                 if ($result)  {
@@ -255,12 +298,64 @@ footer div.wrapper img {
                         }   ?>
                     <span class="time"><?php echo ($row['created']);   ?></span>
 					<p>
-						<?php echo ($row['content']); }} ?> <a href="#">http://net.tutsplus.com/tutorials/php/ ...</a>
+						<?php echo ($row['content']); } } ?>
 					</p>
 				</div>
 			</div>
 		</div>
 	</div>
+    <?php  }
+
+
+
+    // Add section here for showing all users
+    // --------------------------------------
+
+        if (isset($_POST['showusers']))  {
+            $sql = "SELECT * FROM user";
+            $result = $db->query($sql);
+            $sql2 = "SELECT * FROM profile";
+            $result2 = $db->query($sql2);
+
+            if ($result && $result2)  {
+
+
+
+            ?>
+        <table border="1" class="center"> <!-- start a table -->
+        <tr> <!-- first row -->
+            <th>User Name</th> <!-- header -->
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr> <!-- end first row -->
+        <tr> <!-- second row -->
+        <?php foreach ($result as $row)  {    ?>
+                <td><?php echo ($row['username']);              ?></td>
+            <?php foreach ($result2 as $row2)  {  ?>
+                <td><?php echo ($row2['first_name']);            ?></td>
+                <td><?php echo ($row2['last_name']);  }  }  }  } ?></td>
+
+        </tr>
+        <!-- end second row -->
+        </table> <!-- end the table -->
+
+
+
+
+
+
+    <?php
+    // ---------------------------------------
+    ?>
+
+
+
+
+
+
+
+
+
 	<footer>
 		<div class="wrapper">
 			Ribbit - A Twitter Clone
@@ -270,47 +365,6 @@ footer div.wrapper img {
 </html>
 
 
-<?php
 
 
 
-/* copying stuff from myblog index.php file showing blog posts */
-
-
-
-/*
-
-
-    <body>
-    <table border="1" class="center"> <!-- start a table -->
-    <tr> <!-- first row -->
-        <th>Title</th> <!-- header -->
-        <th>Author</th>
-        <th>Date Added</th>
-        <th>Contents</th>
-        <th>Tags</th>
-        <th>Link to edit</th>
-        <th>Delete</th>
-    </tr> <!-- end first row -->
-    <tr> <!-- second row -->
-        <?php foreach ($result as $row)  {
-        $tagshow = $db->query("SELECT * FROM tags WHERE post_id = $row[id]");  ?>
-        <tr>
-        <td><?php echo ($row['title']);          ?></td>
-        <td><?php echo ($row['author']);         ?></td>
-        <td><?php echo ($row['date']);           ?></td>
-        <td><?php echo ($row['contents']);       ?></td>
-        <td><?php foreach($tagshow as $tagrow) {
-                echo $tagrow['tag']; } ?></td>
-        <td>  <a href="edit_post.php?id=<?php echo $row['id']; ?>">View/Edit</a></td>
-        <td>  <a href="index.php?id=<?php echo $row['id']; ?>">Delete</a></td>  <?php } ?>
-        </tr> <?php      ?>
-        <!-- end second row -->
-    </table> <!-- end the table -->
-    </body>
-}
-
-*/
-
-
-?>
