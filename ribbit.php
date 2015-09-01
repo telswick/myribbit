@@ -244,11 +244,15 @@ footer div.wrapper img {
                          }  ?>
 					<span class="name"><?php
                         $username = $db->query("SELECT username FROM user WHERE id = $row[user_id]");
-                        // $username = implode($username);
-                        if ($userrow = $username->fetch_assoc()) {
-                            echo $userrow['username'];
+                        if ($usernamerow = $username->fetch_assoc()) {
+                            echo $usernamerow['username'];
                         }  ?>
-                    </span> @username
+                    </span>
+                        <?php
+                        $useremail = $db->query("SELECT email FROM user WHERE id = $row[user_id]");
+                        if ($useremailrow = $useremail->fetch_assoc())  {
+                            echo $useremailrow['email'];
+                        }   ?>
                     <span class="time"><?php echo ($row['created']);   ?></span>
 					<p>
 						<?php echo ($row['content']); }} ?> <a href="#">http://net.tutsplus.com/tutorials/php/ ...</a>
