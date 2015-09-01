@@ -43,13 +43,13 @@ if ($db->connect_errno) {
 
 <h4>Show Ribbits by User</h4>
 <p>
-    <input type="text" name="username"  value="Enter Username:"></textarea>
+    <input type="text" name="username"  value="Enter Username:">
     <input type="submit" name="showribbits" value="Show Ribbits">
 </p>
 
 <h4>Search Ribbits by Text</h4>
 <p>
-    <input type="text" name="searchtext"  value="Enter Search Text:"></textarea>
+    <input type="text" name="searchtext"  value="Enter Search Text:">
     <input type="submit" name="searchribbits"  value="Search Ribbits">
 </p>
 </form>
@@ -323,19 +323,33 @@ footer div.wrapper img {
 
             ?>
         <table border="1" class="center"> <!-- start a table -->
+        All Ribbit Users
         <tr> <!-- first row -->
             <th>User Name</th> <!-- header -->
+            <th>User ID</th>
             <th>First Name</th>
             <th>Last Name</th>
         </tr> <!-- end first row -->
         <tr> <!-- second row -->
         <?php foreach ($result as $row)  {    ?>
-                <td><?php echo ($row['username']);              ?></td>
-            <?php foreach ($result2 as $row2)  {  ?>
-                <td><?php echo ($row2['first_name']);            ?></td>
-                <td><?php echo ($row2['last_name']);  }  }  }  } ?></td>
-
-        </tr>
+                <td><?php echo ($row['username']);               ?></td>
+                <td><?php
+                $userid = $db->query("SELECT user_id FROM profile WHERE id = $row[id]");
+                if ($useridrow = $userid->fetch_assoc()) {
+                    echo $useridrow['user_id'];
+                    $fixuser = $useridrow['user_id'];
+                }  ?></td>
+                <td><?php
+                    $userfirst = $db->query("SELECT first_name FROM profile WHERE (id = '$fixuser')");
+                    if ($userfirstrow = $userfirst->fetch_assoc()) {
+                        echo $userfirstrow['first_name'];
+                    }  ?></td>
+                <td><?php
+                    $userlast = $db->query("SELECT last_name FROM profile WHERE (id = '$fixuser')");
+                    if ($userlastrow = $userlast->fetch_assoc()) {
+                        echo $userlastrow['last_name'];
+                    }  ?></td>
+        </tr><?php  }  }  }   ?>
         <!-- end second row -->
         </table> <!-- end the table -->
 
