@@ -43,7 +43,7 @@ if ($db->connect_errno) {
 
 <h4>Show Ribbits by User</h4>
 <p>
-    <input type="text" name="username"  value="Enter Username:">
+    <input type="text" name="usernamesearch"  value="Enter Username:">
     <input type="submit" name="showribbits" value="Show Ribbits">
 </p>
 
@@ -257,7 +257,9 @@ footer div.wrapper img {
 
 
         <?php
-        // the following if section isn't working
+
+        // This section is for showing all ribbits, sorted by most recent first
+        // --------------------------------------------------------------------
         if (isset($_POST['sortribbits']))   {
         ?>
 
@@ -358,14 +360,80 @@ footer div.wrapper img {
 
 
 
-    <?php
-    // ---------------------------------------
+<?php
+// ---------------------------------------
+// This section is for showing only ribbits by selected user name
+if (isset($_POST['showribbits']))   {
+    $usersearch = $_POST['usernamesearch'];
     ?>
 
+        <div class="wrapper">
+			<div id="ribbits" class="panel left">
+				<h1>Public Ribbits</h1>
 
 
 
+                <?php
 
+    // Need to get id from table user given username that has been selected
+
+    $sqlid = "SELECT id FROM user WHERE username = '$usersearch'";
+    $resultid = $db->query($sqlid);
+        if ($resultidrow = $resultid->fetch_assoc()) {
+            // echo $resultidrow['id'];
+            $resultid = $resultidrow['id'];
+    }
+
+    // Now get user_id from table profile given id
+
+    $sqluserid = "SELECT user_id FROM profile WHERE id = '$resultid'";
+    $resultuserid = $db->query($sqluserid);
+        if ($resultuseridrow = $resultuserid->fetch_assoc()) {
+            $resultuserid = $resultuseridrow['user_id'];
+        }
+    
+
+    // Now get all ribbits from table ribbit given user_id
+
+    $sql = "SELECT * FROM ribbit WHERE user_id = '$resultuserid' ORDER BY created DESC";
+    $result = $db->query($sql);
+
+    if ($result)  {
+
+        foreach ($result as $row)  {
+
+            ?>
+            <div class="ribbitWrapper">
+            <img class="avatar" <?php
+            $userpic = $db->query("SELECT profile_pic_url FROM profile WHERE id = $row[user_id]");
+            if ($userpicrow = $userpic->fetch_assoc()) {
+                $profilepic = $userpicrow['profile_pic_url'];
+                ?>
+                src = "<?php echo $profilepic   ?>" ><?php
+            }  ?>
+            <span class="name"><?php
+                $username = $db->query("SELECT username FROM user WHERE id = $row[user_id]");
+                if ($usernamerow = $username->fetch_assoc()) {
+                    echo $usernamerow['username'];
+                }  ?>
+                    </span>
+            <?php
+            $useremail = $db->query("SELECT email FROM user WHERE id = $row[user_id]");
+            if ($useremailrow = $useremail->fetch_assoc())  {
+                echo $useremailrow['email'];
+            }   ?>
+            <span class="time"><?php echo ($row['created']);   ?></span>
+            <p>
+            <?php echo ($row['content']); } } ?>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+    <?php  }
+
+
+    ?>
 
 
 
